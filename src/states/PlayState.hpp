@@ -51,11 +51,11 @@ public:
         if (countDownTimer <= 0)
         {
             ball.update();
-            if (ball.collided(paddle1.getPosition())) {
-                HitBall(ball, paddle1, paddle1.getPosition().x + PADDLE_WIDTH);
+            if (ball.collided(paddle1)) {
+                HitBall(ball, paddle1, paddle1.getPosition().x + paddle1.getSize().x);
             }
-            if (ball.collided(paddle2.getPosition())) {
-                HitBall(ball, paddle2, paddle2.getPosition().x - BALL_SIZE);
+            if (ball.collided(paddle2)) {
+                HitBall(ball, paddle2, paddle2.getPosition().x - ball.getSize().x);
             }
 
             // Player 1 scores
@@ -67,7 +67,7 @@ public:
             }
 
             // Player 2 scores
-            if (ball.getPosition().x < -BALL_SIZE) {
+            if (ball.getPosition().x < -ball.getSize().x) {
                 player2Score++;
                 ball.setPosition({BALL_START_X, BALL_START_Y});
                 ball.setVelocity({BALL_SPEED, GetRandBallYVel()});
@@ -122,10 +122,10 @@ void HitBall(Ball& ball, Paddle& paddle, float startX) {
     ball.setPosition({startX, ball.getPosition().y});
     float increase = (paddle.getPaddleSide() == 'L') ? BALL_SPEED_INCREASE : -BALL_SPEED_INCREASE;
     Vector2 velocity {-(ball.getVelocity().x - increase), ball.getVelocity().y};
-    if (ball.getPosition().y < paddle.getPosition().y + (PADDLE_HEIGHT / 2) && paddle.getVelocity().y < 0)
-        velocity.y = -50 + -(8 * (paddle.getPosition().y + (PADDLE_HEIGHT / 2) - ball.getPosition().y));
-    else if (ball.getPosition().y > paddle.getPosition().y + (PADDLE_HEIGHT / 2) && paddle.getVelocity().y > 0) {
-        velocity.y = 50 +(8 * std::abs(paddle.getPosition().y + (PADDLE_HEIGHT / 2) - ball.getPosition().y));
+    if (ball.getPosition().y < paddle.getPosition().y + (paddle.getSize().y / 2) && paddle.getVelocity().y < 0)
+        velocity.y = -50 + -(8 * (paddle.getPosition().y + (paddle.getSize().y / 2) - ball.getPosition().y));
+    else if (ball.getPosition().y > paddle.getPosition().y + (paddle.getSize().y / 2) && paddle.getVelocity().y > 0) {
+        velocity.y = 50 +(8 * std::abs(paddle.getPosition().y + (paddle.getSize().y / 2) - ball.getPosition().y));
     }
     ball.setVelocity(velocity);
 }

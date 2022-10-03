@@ -11,11 +11,8 @@ class MenuButton : public GameObject {
 private:
     std::string text;
     Color color;
-    
-    Vector2 size;
 public:
-    MenuButton(Vector2 pos, std::string text) : GameObject(pos, {0,0}), text{text}, color{50, 50, 70, 255},
-        size{400, 150} {};
+    MenuButton(Vector2 pos, std::string text) : GameObject(pos, {0,0}, {400, 150}), text{text}, color{50, 50, 70, 255} {};
     ~MenuButton() = default;
 
     void update() override {

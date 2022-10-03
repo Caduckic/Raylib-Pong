@@ -5,15 +5,8 @@
 class Ball : public GameObject
 {
 public:
-    Ball(Vector2 pos, Vector2 vel) : GameObject{pos, vel} {};
+    Ball(Vector2 pos, Vector2 vel) : GameObject{pos, vel, {BALL_SIZE, BALL_SIZE}} {};
     ~Ball() = default;
-
-    bool collided(Vector2 paddle) {
-        return (position.x + BALL_SIZE > paddle.x &&
-            position.x < paddle.x + PADDLE_WIDTH &&
-            position.y > paddle.y - BALL_SIZE &&
-            position.y < paddle.y + PADDLE_HEIGHT);
-    }
 
     void update() override {
         position.x += velocity.x * GetFrameTime();
@@ -27,7 +20,7 @@ public:
     }
 
     void draw() override {
-        DrawRectangle(position.x, position.y, BALL_SIZE, BALL_SIZE, BALL_COLOR);
+        DrawRectangle(position.x, position.y, size.x, size.y, BALL_COLOR);
     }
 };
 

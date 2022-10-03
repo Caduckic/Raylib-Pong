@@ -9,11 +9,11 @@ private:
     char side;
 public:
     Paddle(Vector2 pos, Vector2 vel, KeyboardKey up, KeyboardKey down, char side) :
-        GameObject{pos, vel}, up{up}, down{down}, side{side} {};
+        GameObject{pos, vel, {PADDLE_WIDTH, PADDLE_HEIGHT}}, up{up}, down{down}, side{side} {};
     ~Paddle() = default;
 
     void input() {
-        if (IsKeyDown(down) && position.y <= SCREEN_HEIGHT - PADDLE_HEIGHT)
+        if (IsKeyDown(down) && position.y <= SCREEN_HEIGHT - size.y)
         {
             velocity.y = PADDLE_SPEED;
         }
@@ -30,7 +30,7 @@ public:
     }
 
     void draw() override {
-        DrawRectangle(position.x, position.y, PADDLE_WIDTH, PADDLE_HEIGHT, RAYWHITE);
+        DrawRectangle(position.x, position.y, size.x, size.y, RAYWHITE);
     }
 
     char getPaddleSide() {
