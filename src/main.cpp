@@ -5,6 +5,7 @@
 
 #include "states/StateManager.hpp"
 #include "audio/AudioManager.hpp"
+#include "Exiter.hpp"
 
 int main()
 {
@@ -21,7 +22,7 @@ int main()
     // seems to default mouse to the center, simply don't want that
     SetMousePosition(-100, -100);
 
-    while (!WindowShouldClose())
+    while (!WindowShouldClose() && !Exiter::Get().ShouldCloseGame())
     {
 
         BeginDrawing();

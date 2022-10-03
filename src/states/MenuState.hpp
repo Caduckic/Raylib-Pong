@@ -8,6 +8,7 @@
 
 #include "../entities/MenuButton.hpp"
 #include "../audio/AudioManager.hpp"
+#include "../Exiter.hpp"
 
 void CloseGame();
 
@@ -39,8 +40,7 @@ public:
 };
 
 void CloseGame() {
-    CloseWindow();
-    CloseAudioDevice();
+    Exiter::Get().CloseGame();
 }
 
 #endif
