@@ -1,1 +1,3 @@
 build/main.exe
+src/include/raylib.h
+src/lib/libraylib.a
