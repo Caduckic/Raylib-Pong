@@ -15,10 +15,13 @@ int main()
 
     StateManager::Get().pushState("menu");
 
+    SetMousePosition(-100, -100);
+
     //SetMouseCursor(MouseCursor::MOUSE_CURSOR_POINTING_HAND);
 
     while (!WindowShouldClose())
     {
+
         BeginDrawing();
 
         ClearBackground({20, 20, 20, 255});

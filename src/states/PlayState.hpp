@@ -8,7 +8,7 @@
 
 #include "../entities/Paddle.hpp"
 #include "../entities/Ball.hpp"
-//#include "StateManager.hpp"
+#include "../entities/MenuButton.hpp"
 
 float GetRandBallYVel();
 float GetRandVelOffset();
@@ -16,6 +16,7 @@ void HitBall(Ball& ball, Paddle& paddle, float startX);
 
 class PlayState : public State {
 private:
+    MenuButton exit;
     Paddle paddle1;
     Paddle paddle2;
     Ball ball;
@@ -27,13 +28,12 @@ public:
     PlayState(std::function<void()> pop) : pop{pop}, paddle1{{PADDLE_WALL_DIST, PADDLE_START_Y}, {0,0}, KEY_W, KEY_S, 'L'},
         paddle2{{SCREEN_WIDTH - PADDLE_WALL_DIST - PADDLE_WIDTH, PADDLE_START_Y}, {0,0}, KEY_UP, KEY_DOWN, 'R'},
         ball{{BALL_START_X, BALL_START_Y}, {((float)rand() / RAND_MAX > 0.5) ? BALL_SPEED : -BALL_SPEED, GetRandBallYVel()}},
-        countDownTimer{COUNT_DOWN_TIME}, player1Score{0}, player2Score{} {};
+        countDownTimer{COUNT_DOWN_TIME}, player1Score{0}, player2Score{},
+        exit{{SMALL_BUTTON_POS_X, SMALL_BUTTON_POS_Y}, {SMALL_BUTTON_SIZE_X, SMALL_BUTTON_SIZE_Y}, "EXIT", SMALL_FONT_SIZE, pop} {};
     ~PlayState() = default;
 
     virtual void update() override {
-        if (IsKeyPressed(KEY_F)) {
-            pop();
-        }
+        exit.update();
         if (countDownTimer > 0)
         {
             countDownTimer -= GetFrameTime();
@@ -99,6 +99,9 @@ public:
                      (SCREEN_WIDTH / 2) - (MeasureText(std::to_string((int)countDownTimer + 1).c_str(), LARGE_FONT_SIZE) / 2),
                      (SCREEN_HEIGHT / 2) - (LARGE_FONT_SIZE / 2), LARGE_FONT_SIZE, RAYWHITE);
         }
+
+        // Draw Exit button
+        exit.draw();
     }
 
     //virtual void enter() overide;

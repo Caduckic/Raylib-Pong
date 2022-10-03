@@ -7,7 +7,8 @@
 #include "State.hpp"
 
 #include "../entities/MenuButton.hpp"
-//#include "StateManager.hpp"
+
+void CloseGame();
 
 class MenuState : public State {
 private:
@@ -16,11 +17,13 @@ private:
     std::function<void()> push;
     Vector2 mousePos;
 public:
-    MenuState(std::function<void()> push) : push{push}, buttons{{{SCREEN_WIDTH / 2 - 200, SCREEN_HEIGHT / 2 - 75}, "Test button"}} {};
+    MenuState(std::function<void()> push) : push{push},
+        buttons{{{MENU_PLAY_POS_X, MENU_PLAY_POS_Y}, {MENU_BUTTON_SIZE_X, MENU_BUTTON_SIZE_Y}, "PLAY", MEDIUM_FONT_SIZE, push},
+            {{MENU_QUIT_POS_X, MENU_QUIT_POS_Y}, {MENU_BUTTON_SIZE_X, MENU_BUTTON_SIZE_Y}, "QUIT", MEDIUM_FONT_SIZE, CloseGame}
+        } {};
     ~MenuState() = default;
 
     virtual void update() override {
-        
         for (auto& button : buttons) {
             button.update();
         }
@@ -30,10 +33,15 @@ public:
     }
 
     virtual void render() override {
+        DrawText(TITLE_NAME, TITLE_POS_X, TITLE_POS_Y, LARGE_FONT_SIZE, RAYWHITE);
         for (auto& button : buttons) {
             button.draw();
         }
     }
 };
+
+void CloseGame() {
+    CloseWindow();
+}
 
 #endif

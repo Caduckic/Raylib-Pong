@@ -3,36 +3,74 @@
 
 #include "GameObject.hpp"
 #include "../states/StateManager.hpp"
-#include <string>
 
-//auto& state = StateManager::Get();
+#include <functional>
+#include <string>
+#include <map>
+
+enum MenuColors {notacolor, DEFAULT, SELECTED, PRESSED};
+std::map<MenuColors, Color> menuColors;
+void initMenuColors();
+bool CompareColors(Color col1, Color col2);
 
 class MenuButton : public GameObject {
 private:
     std::string text;
     Color color;
+    std::function<void()> click;
+    int fontSize;
 public:
-    MenuButton(Vector2 pos, std::string text) : GameObject(pos, {0,0}, {400, 150}), text{text}, color{50, 50, 70, 255} {};
+    MenuButton(Vector2 pos, Vector2 size, std::string text, int fontSize, std::function<void()> click) : GameObject(pos, {0,0}, size),
+        text{text}, color{50, 50, 70, 255}, fontSize{fontSize}, click{click} {
+        initMenuColors();
+    };
     ~MenuButton() = default;
 
     void update() override {
-        if (IsKeyPressed(KEY_F)) {
-            //state.pushPlayState();
+        if (CompareColors(color, menuColors[PRESSED]) && IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+            click();
+        }
+
+        // project built without c++ wrapper, won't be adding operator overloading to Color
+        if (cursorCollided()) {
+            if (CompareColors(color, menuColors[DEFAULT]))
+                color = menuColors[SELECTED];
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+                color = menuColors[PRESSED];
+            else color = menuColors[SELECTED];
+        }
+        else {
+            color = menuColors[DEFAULT];
         }
     }
 
     virtual void draw() override {
         DrawRectangle(position.x, position.y, size.x, size.y, color);
 
-        DrawText(text.c_str(), position.x + (size.x / 2) - MeasureText(text.c_str(), MEDIUM_FONT_SIZE) / 2 + MEDIUM_FONT_SHADOW,
-            position.y + (size.y / 2) - (MEDIUM_FONT_SIZE / 2) + MEDIUM_FONT_SHADOW, MEDIUM_FONT_SIZE, {0,0,0,60});
-        DrawText(text.c_str(), position.x + (size.x / 2) - MeasureText(text.c_str(), MEDIUM_FONT_SIZE) / 2,
-            position.y + (size.y / 2) - (MEDIUM_FONT_SIZE / 2), MEDIUM_FONT_SIZE, RAYWHITE);
+        DrawText(text.c_str(), position.x + (size.x / 2) - MeasureText(text.c_str(), fontSize) / 2 + (fontSize / FONT_SHADOW_OFFSET),
+            position.y + (size.y / 2) - (fontSize / 2) + (fontSize / FONT_SHADOW_OFFSET), fontSize, {0,0,0,60});
+        DrawText(text.c_str(), position.x + (size.x / 2) - MeasureText(text.c_str(), fontSize) / 2,
+            position.y + (size.y / 2) - (fontSize / 2), fontSize, RAYWHITE);
     }
 
     void setColor(Color col) {
         color = col;
     }
+
+    bool cursorCollided() {
+        return (GetMousePosition().x > position.x && GetMousePosition().y > position.y &&
+            GetMousePosition().x < position.x + size.x && GetMousePosition().y < position.y + size.y);
+    }
 };
+
+bool CompareColors(Color col1, Color col2) {
+    return (col1.r == col2.r && col1.g == col2.g && col1.b == col2.b && col1.a == col2.a);
+}
+
+void initMenuColors() {
+    menuColors[DEFAULT] = {50, 50, 70, 255};
+    menuColors[SELECTED] = {100, 60, 70, 255};
+    menuColors[PRESSED] = {70, 70, 70, 255};
+}
 
 #endif
