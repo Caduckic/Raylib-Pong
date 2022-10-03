@@ -10,6 +10,8 @@
 #include "../entities/Ball.hpp"
 #include "../entities/MenuButton.hpp"
 
+#include "../audio/AudioManager.hpp"
+
 float GetRandBallYVel();
 float GetRandVelOffset();
 void HitBall(Ball& ball, Paddle& paddle, float startX);
@@ -52,15 +54,18 @@ public:
         {
             ball.update();
             if (ball.collided(paddle1)) {
+                AudioManager::Get().playSound(_PADDLE_BOUNCE);
                 HitBall(ball, paddle1, paddle1.getPosition().x + paddle1.getSize().x);
             }
             if (ball.collided(paddle2)) {
+                AudioManager::Get().playSound(_PADDLE_BOUNCE);
                 HitBall(ball, paddle2, paddle2.getPosition().x - ball.getSize().x);
             }
 
             // Player 1 scores
             if (ball.getPosition().x > SCREEN_WIDTH) {
                 player1Score++;
+                AudioManager::Get().playSound(_SCORE);
                 ball.setPosition({BALL_START_X, BALL_START_Y});
                 ball.setVelocity({-BALL_SPEED, GetRandBallYVel()});
                 countDownTimer = COUNT_DOWN_TIME;
@@ -69,6 +74,7 @@ public:
             // Player 2 scores
             if (ball.getPosition().x < -ball.getSize().x) {
                 player2Score++;
+                AudioManager::Get().playSound(_SCORE);
                 ball.setPosition({BALL_START_X, BALL_START_Y});
                 ball.setVelocity({BALL_SPEED, GetRandBallYVel()});
                 countDownTimer = COUNT_DOWN_TIME;
@@ -103,9 +109,6 @@ public:
         // Draw Exit button
         exit.draw();
     }
-
-    //virtual void enter() overide;
-    //virtual void exit() overide;
 };
 
 float GetRandVelOffset() {

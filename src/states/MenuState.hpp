@@ -7,6 +7,7 @@
 #include "State.hpp"
 
 #include "../entities/MenuButton.hpp"
+#include "../audio/AudioManager.hpp"
 
 void CloseGame();
 
@@ -27,9 +28,6 @@ public:
         for (auto& button : buttons) {
             button.update();
         }
-        if (IsKeyPressed(KEY_F)) {
-            push();
-        }
     }
 
     virtual void render() override {
@@ -42,6 +40,7 @@ public:
 
 void CloseGame() {
     CloseWindow();
+    CloseAudioDevice();
 }
 
 #endif

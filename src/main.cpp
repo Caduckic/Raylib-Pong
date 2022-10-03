@@ -4,6 +4,7 @@
 #include "config.hpp"
 
 #include "states/StateManager.hpp"
+#include "audio/AudioManager.hpp"
 
 int main()
 {
@@ -13,11 +14,12 @@ int main()
 
     srand(time(NULL));
 
+    AudioManager::Get().playSound(_START);
+
     StateManager::Get().pushState("menu");
 
+    // seems to default mouse to the center, simply don't want that
     SetMousePosition(-100, -100);
-
-    //SetMouseCursor(MouseCursor::MOUSE_CURSOR_POINTING_HAND);
 
     while (!WindowShouldClose())
     {

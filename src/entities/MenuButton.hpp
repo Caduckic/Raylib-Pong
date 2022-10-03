@@ -3,6 +3,7 @@
 
 #include "GameObject.hpp"
 #include "../states/StateManager.hpp"
+#include "../audio/AudioManager.hpp"
 
 #include <functional>
 #include <string>
@@ -28,6 +29,7 @@ public:
 
     void update() override {
         if (CompareColors(color, menuColors[PRESSED]) && IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+            AudioManager::Get().playSound(_BUTTON);
             click();
         }
 

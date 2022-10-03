@@ -2,6 +2,8 @@
 #define _BALL_HPP_
 #include "GameObject.hpp"
 
+#include "../audio/AudioManager.hpp"
+
 class Ball : public GameObject
 {
 public:
@@ -15,6 +17,7 @@ public:
         // Ball ceiling and floor bounce
         if (position.y < 0 || position.y > 720 - 20)
         {
+            AudioManager::Get().playSound(_WALL_BOUNCE);
             velocity.y = -velocity.y;
         }
     }
