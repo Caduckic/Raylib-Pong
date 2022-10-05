@@ -10,6 +10,9 @@ const int PADDLE_WALL_DIST {100};
 const float PADDLE_START_Y {(SCREEN_HEIGHT / 2) - (PADDLE_HEIGHT / 2)};
 const float BALL_START_X {(SCREEN_WIDTH / 2) - (BALL_SIZE / 2)}, BALL_START_Y {(SCREEN_HEIGHT / 2) - (BALL_SIZE / 2)};
 
+const float CPU_PADDLE_CENTER_RANGE {40};
+const float CPU_PADDLE_REACT_TIME {0.3f};
+
 const int FRAME_TARGET {144};
 
 const float PADDLE_SPEED {500}, BALL_SPEED {300};

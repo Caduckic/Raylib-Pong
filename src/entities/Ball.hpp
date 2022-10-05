@@ -11,15 +11,20 @@ public:
     ~Ball() = default;
 
     void update() override {
-        position.x += velocity.x * GetFrameTime();
-        position.y += velocity.y * GetFrameTime();
-
         // Ball ceiling and floor bounce
-        if (position.y < 0 || position.y > 720 - 20)
-        {
+        if (position.y < 0) {
+            position.y = 0;
             AudioManager::Get().playSound(_WALL_BOUNCE);
             velocity.y = -velocity.y;
         }
+        else if (position.y > SCREEN_HEIGHT - BALL_SIZE) {
+            position.y = SCREEN_HEIGHT - BALL_SIZE;
+            AudioManager::Get().playSound(_WALL_BOUNCE);
+            velocity.y = -velocity.y;
+        }
+
+        position.x += velocity.x * GetFrameTime();
+        position.y += velocity.y * GetFrameTime();
     }
 
     void draw() override {

@@ -28,12 +28,29 @@ private:
     int player2Score;
     MenuButton exit;
 public:
-    PlayState() : paddle1{{PADDLE_WALL_DIST, PADDLE_START_Y}, {0,0}, KEY_W, KEY_S, 'L'},
-        paddle2{{SCREEN_WIDTH - PADDLE_WALL_DIST - PADDLE_WIDTH, PADDLE_START_Y}, {0,0}, KEY_UP, KEY_DOWN, 'R'},
+    PlayState(bool isCpu) : paddle1{{PADDLE_WALL_DIST, PADDLE_START_Y}, {0,0}, KEY_W, KEY_S, 'L', false},
+        paddle2{{SCREEN_WIDTH - PADDLE_WALL_DIST - PADDLE_WIDTH, PADDLE_START_Y}, {0,0}, KEY_UP, KEY_DOWN, 'R', isCpu},
         ball{{BALL_START_X, BALL_START_Y}, {((float)rand() / RAND_MAX > 0.5) ? BALL_SPEED : -BALL_SPEED, GetRandBallYVel()}},
         countDownTimer{COUNT_DOWN_TIME}, player1Score{0}, player2Score{},
         exit{{SMALL_BUTTON_POS_X, SMALL_BUTTON_POS_Y}, {SMALL_BUTTON_SIZE_X, SMALL_BUTTON_SIZE_Y}, "EXIT", SMALL_FONT_SIZE, PopPlay} {};
     ~PlayState() = default;
+
+    // to reset state when restarted in menus
+    virtual void init() override {
+        countDownTimer = COUNT_DOWN_TIME;
+
+        player1Score = 0;
+        player2Score = 0;
+
+        paddle1.setPosition({PADDLE_WALL_DIST, PADDLE_START_Y});
+        paddle1.setVelocity({0,0});
+
+        paddle2.setPosition({SCREEN_WIDTH - PADDLE_WALL_DIST - PADDLE_WIDTH, PADDLE_START_Y});
+        paddle2.setVelocity({0,0});
+
+        ball.setPosition({BALL_START_X, BALL_START_Y});
+        ball.setVelocity({BALL_SPEED, GetRandBallYVel()});
+    }
 
     virtual void update() override {
         exit.update();
@@ -44,7 +61,10 @@ public:
 
         // Player inputs
         paddle1.input();
-        paddle2.input();
+        if (!paddle2.getIsCpu())
+            paddle2.input();
+        else
+            paddle2.setBallPos({ball.getPosition().x + (BALL_SIZE/2), ball.getPosition().y + (BALL_SIZE/2)});
 
         // Player updates
         paddle1.update();

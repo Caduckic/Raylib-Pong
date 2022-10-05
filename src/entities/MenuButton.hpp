@@ -39,6 +39,7 @@ public:
             AudioManager::Get().playSound(_BUTTON);
             if (click != NULL) click();
             else {
+                nextState->init();
                 StateManager::Get().pushState(nextState);
             }
         }
