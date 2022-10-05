@@ -3,11 +3,12 @@
 
 #include <vector>
 #include <functional>
+#include <memory>
 
 #include "State.hpp"
+#include "PlayState.hpp"
 
 #include "../entities/MenuButton.hpp"
-#include "../audio/AudioManager.hpp"
 #include "../Exiter.hpp"
 
 void CloseGame();
@@ -15,13 +16,11 @@ void CloseGame();
 class MenuState : public State {
 private:
     std::vector<MenuButton> buttons;
-    std::vector<MenuButton>::iterator it;
-    std::function<void()> push;
-    Vector2 mousePos;
+    //std::vector<MenuButton>::iterator it;
 public:
-    MenuState(std::function<void()> push) : push{push},
-        buttons{{{MENU_PLAY_POS_X, MENU_PLAY_POS_Y}, {MENU_BUTTON_SIZE_X, MENU_BUTTON_SIZE_Y}, "PLAY", MEDIUM_FONT_SIZE, push},
-            {{MENU_QUIT_POS_X, MENU_QUIT_POS_Y}, {MENU_BUTTON_SIZE_X, MENU_BUTTON_SIZE_Y}, "QUIT", MEDIUM_FONT_SIZE, CloseGame}
+    MenuState() : buttons
+        {{{MENU_PLAY_POS_X, MENU_PLAY_POS_Y}, {MENU_BUTTON_SIZE_X, MENU_BUTTON_SIZE_Y}, "PLAY", MEDIUM_FONT_SIZE, std::make_shared<PlayState>()},
+        {{MENU_QUIT_POS_X, MENU_QUIT_POS_Y}, {MENU_BUTTON_SIZE_X, MENU_BUTTON_SIZE_Y}, "QUIT", MEDIUM_FONT_SIZE, CloseGame}
         } {};
     ~MenuState() = default;
 

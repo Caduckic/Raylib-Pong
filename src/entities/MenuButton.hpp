@@ -3,11 +3,13 @@
 
 #include "GameObject.hpp"
 #include "../states/StateManager.hpp"
+#include "../states/State.hpp"
 #include "../audio/AudioManager.hpp"
 
 #include <functional>
 #include <string>
 #include <map>
+#include <memory>
 
 enum MenuColors {notacolor, DEFAULT, SELECTED, PRESSED};
 std::map<MenuColors, Color> menuColors;
@@ -18,11 +20,16 @@ class MenuButton : public GameObject {
 private:
     std::string text;
     Color color;
-    std::function<void()> click;
     int fontSize;
+    std::function<void()> click;
+    std::shared_ptr<State> nextState;
 public:
-    MenuButton(Vector2 pos, Vector2 size, std::string text, int fontSize, std::function<void()> click) : GameObject(pos, {0,0}, size),
-        text{text}, color{50, 50, 70, 255}, fontSize{fontSize}, click{click} {
+    MenuButton(Vector2 pos, Vector2 size, std::string text, int fontSize, std::function<void()> press) : GameObject(pos, {0,0}, size),
+        text{text}, color{50, 50, 70, 255}, fontSize{fontSize}, click{press} {
+        initMenuColors();
+    };
+    MenuButton(Vector2 pos, Vector2 size, std::string text, int fontSize, std::shared_ptr<State> nextState) : GameObject(pos, {0,0}, size),
+        text{text}, color{50, 50, 70, 255}, fontSize{fontSize}, click{NULL}, nextState{nextState} {
         initMenuColors();
     };
     ~MenuButton() = default;
@@ -30,7 +37,10 @@ public:
     void update() override {
         if (CompareColors(color, menuColors[PRESSED]) && IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
             AudioManager::Get().playSound(_BUTTON);
-            click();
+            if (click != NULL) click();
+            else {
+                StateManager::Get().pushState(nextState);
+            }
         }
 
         // project built without c++ wrapper, won't be adding operator overloading to Color

@@ -5,6 +5,7 @@
 #include <functional>
 #include "../config.hpp"
 #include "State.hpp"
+#include "StateManager.hpp"
 
 #include "../entities/Paddle.hpp"
 #include "../entities/Ball.hpp"
@@ -15,23 +16,23 @@
 float GetRandBallYVel();
 float GetRandVelOffset();
 void HitBall(Ball& ball, Paddle& paddle, float startX);
+void PopPlay();
 
 class PlayState : public State {
 private:
-    MenuButton exit;
     Paddle paddle1;
     Paddle paddle2;
     Ball ball;
     float countDownTimer;
     int player1Score;
     int player2Score;
-    std::function<void()> pop;
+    MenuButton exit;
 public:
-    PlayState(std::function<void()> pop) : pop{pop}, paddle1{{PADDLE_WALL_DIST, PADDLE_START_Y}, {0,0}, KEY_W, KEY_S, 'L'},
+    PlayState() : paddle1{{PADDLE_WALL_DIST, PADDLE_START_Y}, {0,0}, KEY_W, KEY_S, 'L'},
         paddle2{{SCREEN_WIDTH - PADDLE_WALL_DIST - PADDLE_WIDTH, PADDLE_START_Y}, {0,0}, KEY_UP, KEY_DOWN, 'R'},
         ball{{BALL_START_X, BALL_START_Y}, {((float)rand() / RAND_MAX > 0.5) ? BALL_SPEED : -BALL_SPEED, GetRandBallYVel()}},
         countDownTimer{COUNT_DOWN_TIME}, player1Score{0}, player2Score{},
-        exit{{SMALL_BUTTON_POS_X, SMALL_BUTTON_POS_Y}, {SMALL_BUTTON_SIZE_X, SMALL_BUTTON_SIZE_Y}, "EXIT", SMALL_FONT_SIZE, pop} {};
+        exit{{SMALL_BUTTON_POS_X, SMALL_BUTTON_POS_Y}, {SMALL_BUTTON_SIZE_X, SMALL_BUTTON_SIZE_Y}, "EXIT", SMALL_FONT_SIZE, PopPlay} {};
     ~PlayState() = default;
 
     virtual void update() override {
@@ -134,6 +135,10 @@ void HitBall(Ball& ball, Paddle& paddle, float startX) {
         velocity.y = 50 +(8 * std::abs(paddle.getPosition().y + (paddle.getSize().y / 2) - ball.getPosition().y));
     }
     ball.setVelocity(velocity);
+}
+
+void PopPlay() {
+    StateManager::Get().popState();
 }
 
 #endif

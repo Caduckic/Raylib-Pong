@@ -8,9 +8,6 @@
 #include <iostream>
 
 #include "State.hpp"
-#include "DummyState.hpp"
-#include "PlayState.hpp"
-#include "MenuState.hpp"
 
 enum StateNames {notastate, MENUSTATE, PLAYSTATE};
 std::map<std::string, StateNames> stateNames;
@@ -19,7 +16,7 @@ void initStateNames();
 class StateManager {
 private:
     static StateManager instance;
-    std::stack<std::unique_ptr<State>> states;
+    std::stack<std::shared_ptr<State>> states;
     StateManager() {
         initStateNames();
     }
@@ -30,8 +27,9 @@ public:
     StateManager(const StateManager&) = delete;
     ~StateManager() = default;
 
-    void pushState(std::string stateName) {
-        try {
+    void pushState(std::shared_ptr<State> newState) {
+        states.push(newState);
+        /*try {
             bool failed {false};
             auto& s = states;
             switch (stateNames[stateName]) {
@@ -48,7 +46,7 @@ public:
             if (failed) throw(stateName);
         } catch (std::string state) {
             std::cout << "\"" << state << "\" is not a valid state" << std::endl;
-        }
+        }*/
     }
 
     void popState() {
