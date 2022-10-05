@@ -11,7 +11,7 @@
 
 int main()
 {
-    InitWindow(1280, 720, "Pong raylib");
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE_NAME);
 
     SetTargetFPS(FRAME_TARGET);
 
