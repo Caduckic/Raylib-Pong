@@ -29,24 +29,6 @@ public:
 
     void pushState(std::shared_ptr<State> newState) {
         states.push(newState);
-        /*try {
-            bool failed {false};
-            auto& s = states;
-            switch (stateNames[stateName]) {
-            case MENUSTATE:
-                states.push(std::make_unique<MenuState>([&s](){s.push(std::make_unique<PlayState>([&s](){s.pop();}));}));
-                break;
-            case PLAYSTATE:
-                states.push(std::make_unique<PlayState>([&s](){s.pop();}));
-                break;
-            default:
-                failed = true;
-                break;
-            }
-            if (failed) throw(stateName);
-        } catch (std::string state) {
-            std::cout << "\"" << state << "\" is not a valid state" << std::endl;
-        }*/
     }
 
     void popState() {

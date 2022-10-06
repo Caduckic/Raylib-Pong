@@ -9,6 +9,8 @@
 #include "audio/AudioManager.hpp"
 #include "Exiter.hpp"
 
+#include "SaveManager.hpp"
+
 int main()
 {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE_NAME);

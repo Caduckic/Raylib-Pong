@@ -1,4 +1,5 @@
 build/main.exe
 src/include/raylib.h
+src/include/json
 src/lib/libraylib.a
 \src\lib\libraylib.a
