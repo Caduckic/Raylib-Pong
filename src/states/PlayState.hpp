@@ -6,6 +6,7 @@
 #include "../config.hpp"
 #include "State.hpp"
 #include "StateManager.hpp"
+#include "EnterScoreState.hpp"
 
 #include "../entities/Paddle.hpp"
 #include "../entities/Ball.hpp"
@@ -94,11 +95,16 @@ public:
 
             // Player 2 scores
             if (ball.getPosition().x < -ball.getSize().x) {
-                player2Score++;
-                AudioManager::Get().playSound(_SCORE);
-                ball.setPosition({BALL_START_X, BALL_START_Y});
-                ball.setVelocity({BALL_SPEED, GetRandBallYVel()});
-                countDownTimer = COUNT_DOWN_TIME;
+                if (paddle2.getIsCpu()) {
+                    StateManager::Get().pushState(std::make_shared<EnterScoreState>(player1Score));
+                }
+                else {
+                    player2Score++;
+                    AudioManager::Get().playSound(_SCORE);
+                    ball.setPosition({BALL_START_X, BALL_START_Y});
+                    ball.setVelocity({BALL_SPEED, GetRandBallYVel()});
+                    countDownTimer = COUNT_DOWN_TIME;
+                }
             }
         }
     }

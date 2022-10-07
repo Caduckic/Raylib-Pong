@@ -35,6 +35,16 @@ public:
         states.pop();
     }
 
+    void popStates(const unsigned int pops) {
+        if (pops >= states.size()) {
+            std::cout << pops << " cannot pop all/more than loaded states" << std::endl;
+        }
+        else {
+            for(size_t i {0}; i < pops; i++)
+                states.pop();
+        }
+    }
+
     void update() {
         states.top()->update();
     }

@@ -6,45 +6,53 @@
 #include <iostream>
 #include <filesystem>
 #include <string>
-#include <json/json.h>
-#include <json/value.h>
+#include <vector>
+#include "json/json.h"
+#include "json/json-forwards.h"
 
 class SaveManager {
 private:
     static SaveManager instance;
     std::string savePath;
-    //Json::Value saveData;
+    Json::Value saveData;
     SaveManager() {
         #if _WIN32
         std::string appdata = getenv("APPDATA");
         savePath = appdata + "\\.raylibPong";
-        if (!std::filesystem::exists(savePath.c_str())) {
+        if (!std::filesystem::exists(savePath + "\\saveData.json")) {
             std::cout << "does not exist yo" << appdata << std::endl;
-            std::filesystem::current_path(appdata);
-            std::cout << "Current path is " << std::filesystem::current_path() << std::endl;
-            std::filesystem::create_directory(".raylibPong");
-            std::filesystem::current_path(savePath.c_str());
 
-            /*Json::Reader reader;
+            std::filesystem::current_path(appdata);
+            std::filesystem::create_directory(".raylibPong");
+
             Json::StyledStreamWriter writer;
 
-            std::ofstream newFile;
-            std::ifstream file(savePath + "saveData.json");
+            std::ofstream file(savePath + "\\saveData.json");
 
-            if (!reader.parse(file, saveData)) {
-                //std::cout << reader.getFormatedErrorMessages();
-                exit(1);
-            }
+            Json::Value user;
+            std::string na = "jeff";
+            user["name"] = na;
+            user["score"] = 4;
 
-            saveData[0]["score"] = 2;
-            saveData[0]["name"] = "Caduckic";
+            saveData["scores"] = Json::arrayValue;
+            saveData["scores"].append(user);
 
-            newFile.open(savePath + "saveData.json");
-            writer.write(newFile, saveData);
-            newFile.close();*/
+            writer.write(file, saveData);
+            file.close();
         }
             
-        else std::cout << "does exist yo boi" << std::endl;
+        else {
+            std::cout << "does exist yo boi" << std::endl;
+            
+            Json::Reader reader;
+            std::ifstream file(savePath + "\\saveData.json");
+
+            if (!reader.parse(file, saveData)) {
+                std::cout << reader.getFormattedErrorMessages();
+            }
+
+            std::cout << saveData["scores"][0]["name"].asString() << std::endl;
+        }
         #elif __APPLE__
 	    
 	    #elif __LINUX__
@@ -59,6 +67,28 @@ public:
     }
     SaveManager(const SaveManager&) = delete;
     ~SaveManager() = default;
+
+    void saveScore(const std::string name, const int score) {
+        Json::StyledStreamWriter writer;
+        std::ofstream file(savePath + "\\saveData.json");
+
+        Json::Value user;
+        user["name"] = name;
+        user["score"] = score;
+
+        saveData["scores"].append(user);
+
+        writer.write(file, saveData);
+        file.close();
+    }
+
+    std::string getNameAt(int index) {
+        return saveData["scores"][index]["name"].asString();
+    }
+
+    int getScoreAt(int index) {
+        return saveData["scores"][index]["score"].asInt();
+    }
 };
 
 SaveManager SaveManager::instance;

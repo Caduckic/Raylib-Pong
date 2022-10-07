@@ -1,6 +1,7 @@
 #ifndef _CONFIG_HPP_
 #define _CONFIG_HPP_
 #include "raylib.h"
+#include <string>
 
 const int SCREEN_WIDTH {1280}, SCREEN_HEIGHT {720};
 const int PADDLE_WIDTH {30}, PADDLE_HEIGHT {200};
@@ -38,5 +39,9 @@ const int SMALL_BUTTON_SIZE_X {120}, SMALL_BUTTON_SIZE_Y {45};
 const int SMALL_BUTTON_POS_X {SCREEN_WIDTH / 2 - SMALL_BUTTON_SIZE_X / 2}, SMALL_BUTTON_POS_Y {SCREEN_HEIGHT - SMALL_BUTTON_SIZE_Y - 10};
 
 const Color BALL_COLOR {255,50,50,255};
+
+const std::string SCORE_STRING {"Your score was "};
+const int MAX_NAME_CHARS {9};
+const float INPUT_BLINK_TIME {0.6f};
 
 #endif
