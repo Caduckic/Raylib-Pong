@@ -7,14 +7,14 @@
             },
             "label": "C/C++: g++.exe build active file",
             "type": "cppbuild",
-            "command": "/usr/bin/g++",
+            "command": "F:\\msys64\\mingw64\\bin\\g++.exe",
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${workspaceFolder}/src/main.cpp",
-                "${workspaceFolder}/src/include/jsoncpp.cpp",
+                "${workspaceFolder}\\src\\main.cpp",
+                "${workspaceFolder}\\src\\include\\jsoncpp.cpp",
                 "-o",
-                "${workspaceFolder}/build/main.exe",
+                "${workspaceFolder}\\build\\main.exe",
                 "-Wall",
                 "-Wno-missing-braces",
                 "-I",
@@ -22,12 +22,9 @@
                 "-L",
                 "../src/lib/",
                 "-lraylib",
-                "-lGL",
-                "-lm",
-                "-lpthread",
-                "-ldl",
-                "-lrt",
-                "-lX11"
+                "-lopengl32",
+                "-lgdi32",
+                "-lwinmm"
             ],
             "options": {
                 "cwd": "${fileDirname}"

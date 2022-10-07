@@ -20,7 +20,7 @@ private:
         std::string appdata = getenv("APPDATA");
         savePath = appdata + "\\.raylibPong";
         if (!std::filesystem::exists(savePath + "\\saveData.json")) {
-            std::cout << "does not exist yo" << appdata << std::endl;
+            std::cout << "no save data found" << std::endl;
 
             std::filesystem::current_path(appdata);
             std::filesystem::create_directory(".raylibPong");
@@ -42,7 +42,7 @@ private:
         }
             
         else {
-            std::cout << "does exist yo boi" << std::endl;
+            std::cout << "save data found" << std::endl;
             
             Json::Reader reader;
             std::ifstream file(savePath + "\\saveData.json");
@@ -53,9 +53,46 @@ private:
 
             std::cout << saveData["scores"][0]["name"].asString() << std::endl;
         }
-        #elif __APPLE__
 	    
-	    #elif __LINUX__
+	    #elif __linux__
+            std::string localShare = getenv("HOME");
+            localShare += "/.local/share";
+            savePath = localShare + "/.raylibPong";
+            if (!std::filesystem::exists(savePath + "/saveData.json")) {
+                std::cout << "no save data found" << std::endl;
+
+                std::filesystem::current_path(localShare);
+                std::filesystem::create_directory(".raylibPong");
+
+                Json::StyledStreamWriter writer;
+
+                std::ofstream file(savePath + "/saveData.json");
+
+                Json::Value user;
+                std::string na = "jeff";
+                user["name"] = na;
+                user["score"] = 4;
+
+                saveData["scores"] = Json::arrayValue;
+                saveData["scores"].append(user);
+
+                writer.write(file, saveData);
+                file.close();
+            }
+
+            else {
+                std::cout << "save data found" << std::endl;
+                
+                Json::Reader reader;
+                std::ifstream file(savePath + "/saveData.json");
+
+                if (!reader.parse(file, saveData)) {
+                    std::cout << reader.getFormattedErrorMessages();
+                }
+
+                std::cout << saveData["scores"][0]["name"].asString() << std::endl;
+            }
+        #elif __APPLE__
 
         #endif
         //else if (DirectoryExists("$HOME/.local/share"))
@@ -70,7 +107,13 @@ public:
 
     void saveScore(const std::string name, const int score) {
         Json::StyledStreamWriter writer;
-        std::ofstream file(savePath + "\\saveData.json");
+
+        // idk if this is needed but for now it'll work
+        #if _WIN32
+            std::ofstream file(savePath + "\\saveData.json");
+        #elif __linux__
+            std::ofstream file(savePath + "/saveData.json");
+        #endif
 
         Json::Value user;
         user["name"] = name;

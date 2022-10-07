@@ -9,10 +9,6 @@
 #include "audio/AudioManager.hpp"
 #include "Exiter.hpp"
 
-#include "SaveManager.hpp"
-
-
-#include "states/EnterScoreState.hpp"
 int main()
 {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE_NAME);
@@ -27,6 +23,7 @@ int main()
 
     // seems to default mouse to the center, simply don't want that
     SetMousePosition(-100, -100);
+
     while (!WindowShouldClose() && !Exiter::Get().ShouldCloseGame())
     {
 
