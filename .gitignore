@@ -2,5 +2,7 @@ build/main.exe
 src/include/raylib.h
 src/include/jsoncpp.cpp
 src/include/json
+.vscode/tasks
+\.vscode\tasks.json
 src/lib/libraylib.a
 \src\lib\libraylib.a
