@@ -7,6 +7,7 @@
 
 #include "State.hpp"
 #include "ModeSelectState.hpp"
+#include "LeaderBoardState.hpp"
 
 #include "../entities/MenuButton.hpp"
 #include "../Exiter.hpp"
@@ -20,7 +21,8 @@ private:
 public:
     MenuState() : buttons
         {{{MENU_PLAY_POS_X, MENU_PLAY_POS_Y}, {MENU_BUTTON_SIZE_X, MENU_BUTTON_SIZE_Y}, "PLAY", MEDIUM_FONT_SIZE, std::make_shared<ModeSelectState>()},
-        {{MENU_QUIT_POS_X, MENU_QUIT_POS_Y}, {MENU_BUTTON_SIZE_X, MENU_BUTTON_SIZE_Y}, "QUIT", MEDIUM_FONT_SIZE, CloseGame}
+        {{MENU_QUIT_POS_X, MENU_QUIT_POS_Y}, {MENU_BUTTON_SIZE_X, MENU_BUTTON_SIZE_Y}, "QUIT", MEDIUM_FONT_SIZE, CloseGame},
+        {{MENU_QUIT_POS_X, MENU_QUIT_POS_Y + 200}, {MENU_BUTTON_SIZE_X, MENU_BUTTON_SIZE_Y}, "LEADERBOARD", MEDIUM_FONT_SIZE, std::make_shared<LeaderBoardState>()}
         } {};
     ~MenuState() = default;
 
