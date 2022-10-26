@@ -4,5 +4,6 @@ src/include/jsoncpp.cpp
 src/include/json
 /.vscode/tasks.json
 .vscode/tasks.json
-src/lib/libraylib.a
-\src\lib\libraylib.a
+src/lib/*
+build/zip
+build/game.*

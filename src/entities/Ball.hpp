@@ -2,7 +2,7 @@
 #define _BALL_HPP_
 #include "GameObject.hpp"
 
-#include "../audio/AudioManager.hpp"
+#include "../AudioManager.hpp"
 
 class Ball : public GameObject
 {

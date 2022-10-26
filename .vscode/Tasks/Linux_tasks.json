@@ -20,7 +20,7 @@
                 "-I",
                 "../src/include/",
                 "-L",
-                "../src/lib/",
+                "../src/lib/desktop",
                 "-lraylib",
                 "-lGL",
                 "-lm",
