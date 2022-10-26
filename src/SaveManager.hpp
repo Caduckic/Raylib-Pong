@@ -5,10 +5,13 @@
 #include <fstream>
 #include <iostream>
 #include <filesystem>
+#include <algorithm>
 #include <string>
 #include <vector>
 #include "json/json.h"
 #include "json/json-forwards.h"
+#include "SavedScore.hpp"
+
 
 class SaveManager {
 private:
@@ -98,6 +101,20 @@ private:
         //else if (DirectoryExists("$HOME/.local/share"))
             //if (!DirectoryExists("$HOME/.local/share/Raylib-Pong"))
     }
+
+    void fetchSaveData() {
+        Json::Reader reader;
+
+         #if _WIN32
+            std::ifstream file(savePath + "\\saveData.json");
+        #elif __linux__
+            std::ifstream file(savePath + "/saveData.json");
+        #endif
+
+        if (!reader.parse(file, saveData)) {
+            std::cout << reader.getFormattedErrorMessages();
+        }
+    }
 public:
     static SaveManager& Get() {
         return instance;
@@ -123,6 +140,20 @@ public:
 
         writer.write(file, saveData);
         file.close();
+    }
+
+    std::vector<SavedScore> getScores() {
+        fetchSaveData();
+        std::vector<SavedScore> scores {};
+        for (int i {0}; i < saveData["scores"].size(); i++) {
+            SavedScore score {
+                saveData["scores"][i]["name"].asString(),
+                saveData["scores"][i]["score"].asInt()
+            };
+            scores.push_back(score);
+        }
+        std::sort(scores.begin(), scores.end(), [](SavedScore a, SavedScore b) {return a>b;});
+        return scores;
     }
 
     std::string getNameAt(int index) {

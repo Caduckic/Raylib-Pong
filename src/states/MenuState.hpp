@@ -7,6 +7,7 @@
 
 #include "State.hpp"
 #include "ModeSelectState.hpp"
+#include "LeaderBoardState.hpp"
 
 #include "../entities/MenuButton.hpp"
 #include "../Exiter.hpp"

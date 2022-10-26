@@ -16,7 +16,7 @@ protected:
     Color color;
     int fontSize;
 public:
-    UIElement(Vector2 pos, Vector2 size ,std::string text, int fontSize) : GameObject(pos, {0,0}, size),
+    UIElement(Vector2 pos, Vector2 size, std::string text, int fontSize) : GameObject(pos, {0,0}, size),
         text{text}, color{50, 50, 70, 255}, fontSize{fontSize} {};
     ~UIElement() = default;
 
