@@ -4,7 +4,7 @@
 #include "UIElement.hpp"
 #include "../states/StateManager.hpp"
 #include "../states/State.hpp"
-#include "../audio/AudioManager.hpp"
+#include "../AudioManager.hpp"
 
 #include <functional>
 #include <string>

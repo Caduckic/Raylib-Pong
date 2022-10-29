@@ -4,9 +4,9 @@
 #include "raylib.h"
 #include <map>
 #include <string>
-#include "../../score.h"
+//#include "../../score.h"
 
-Wave LoadWaveFromHeader(const WaveSound& sound);
+//Wave LoadWaveFromHeader(const WaveSound& sound);
 enum GameSounds {notasound, _WALL_BOUNCE, _PADDLE_BOUNCE, _SCORE, _START, _BUTTON};
 void InitGameSounds(std::map<GameSounds, Sound>&);
 
@@ -36,6 +36,13 @@ public:
 AudioManager AudioManager::instance;
 
 void InitGameSounds(std::map<GameSounds, Sound>& sounds) {
+    #if defined(PLATFORM_WEB)
+    sounds[_WALL_BOUNCE] = LoadSound("../src/audio/wall_bounce.wav");
+    sounds[_PADDLE_BOUNCE] = LoadSound("../src/audio/paddle_bounce.wav");
+    sounds[_START] = LoadSound("../src/audio/start.wav");
+    sounds[_BUTTON] = LoadSound("../src/audio/button_press.wav");
+    sounds[_SCORE] = LoadSound("../src/audio/score.wav");
+    #else
     sounds[_WALL_BOUNCE] = LoadSound("../src/audio/wall_bounce.wav");
     sounds[_PADDLE_BOUNCE] = LoadSound("../src/audio/paddle_bounce.wav");
     sounds[_START] = LoadSound("../src/audio/start.wav");
@@ -45,10 +52,11 @@ void InitGameSounds(std::map<GameSounds, Sound>& sounds) {
     // Once sounds are finalized, this will be changed to the method below
     //Wave score = LoadWaveFromHeader(SCORE_SOUND);
     //sounds[_SCORE] = LoadSoundFromWave(score);
+    #endif
 }
 
 // I assume there is a better way to do this but this works so cool
-Wave LoadWaveFromHeader(const WaveSound& sound) {
+/*Wave LoadWaveFromHeader(const WaveSound& sound) {
     Wave audio;
     audio.data = sound.data;
     audio.frameCount = sound.frameCount;
@@ -56,6 +64,6 @@ Wave LoadWaveFromHeader(const WaveSound& sound) {
     audio.channels = sound.channels;
     audio.sampleSize = sound.sampleSize;
     return audio;
-}
+}*/
 
 #endif

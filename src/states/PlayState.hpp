@@ -6,18 +6,22 @@
 #include "../config.hpp"
 #include "State.hpp"
 #include "StateManager.hpp"
-#include "EnterScoreState.hpp"
+
+#ifndef PLATFORM_WEB
+    #include "EnterScoreState.hpp"
+#endif
 
 #include "../entities/Paddle.hpp"
 #include "../entities/Ball.hpp"
 #include "../entities/MenuButton.hpp"
 
-#include "../audio/AudioManager.hpp"
+#include "../AudioManager.hpp"
 
 float GetRandBallYVel();
 float GetRandVelOffset();
 void HitBall(Ball& ball, Paddle& paddle, float startX);
 void PopPlay();
+void PopToMenu();
 
 class PlayState : public State {
 private:
@@ -95,6 +99,7 @@ public:
 
             // Player 2 scores
             if (ball.getPosition().x < -ball.getSize().x) {
+                #ifndef PLATFORM_WEB
                 if (paddle2.getIsCpu()) {
                     StateManager::Get().pushState(std::make_shared<EnterScoreState>(player1Score));
                 }
@@ -105,6 +110,18 @@ public:
                     ball.setVelocity({BALL_SPEED, GetRandBallYVel()});
                     countDownTimer = COUNT_DOWN_TIME;
                 }
+                #else
+                    if (paddle2.getIsCpu()) {
+                    PopToMenu();
+                }
+                else {
+                    player2Score++;
+                    AudioManager::Get().playSound(_SCORE);
+                    ball.setPosition({BALL_START_X, BALL_START_Y});
+                    ball.setVelocity({BALL_SPEED, GetRandBallYVel()});
+                    countDownTimer = COUNT_DOWN_TIME;
+                }
+                #endif
             }
         }
     }
@@ -164,6 +181,11 @@ void HitBall(Ball& ball, Paddle& paddle, float startX) {
 }
 
 void PopPlay() {
+    StateManager::Get().popState();
+}
+
+void PopToMenu() {
+    StateManager::Get().popState();
     StateManager::Get().popState();
 }
 

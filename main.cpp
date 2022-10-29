@@ -3,9 +3,10 @@
 
 int main()
 {
-    Wave test = LoadWave("src/audio/score.wav");
-    if (ExportWaveAsCode(test, "./score.h"))
-        std::cout << "Success!!!" << std::endl;
+    Wave sound = LoadWave("src/audio/button_pressfr.wav");
+    if (ExportWaveAsCode(sound, "button_pressfr.h"))
+        std::cout << "button_pressfr.h created!" << std::endl;
+    else std::cout << "error making " << "button_pressfr.h..." << std::endl;
 
     return 0;
 }
